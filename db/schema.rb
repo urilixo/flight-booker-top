@@ -16,19 +16,19 @@ ActiveRecord::Schema.define(version: 2022_03_27_191202) do
   enable_extension "plpgsql"
 
   create_table "airports", force: :cascade do |t|
-    t.string "code"
+    t.string "code", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "flights", force: :cascade do |t|
-    t.bigint "departure_airport_id", null: false
-    t.bigint "arrival_aiport_id", null: false
     t.datetime "departure_time"
     t.integer "duration"
+    t.bigint "departure_airport_id", null: false
+    t.bigint "arrival_airport_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["arrival_aiport_id"], name: "index_flights_on_arrival_aiport_id"
+    t.index ["arrival_airport_id"], name: "index_flights_on_arrival_airport_id"
     t.index ["departure_airport_id"], name: "index_flights_on_departure_airport_id"
   end
 
@@ -38,6 +38,6 @@ ActiveRecord::Schema.define(version: 2022_03_27_191202) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "flights", "airports", column: "arrival_aiport_id"
+  add_foreign_key "flights", "airports", column: "arrival_airport_id"
   add_foreign_key "flights", "airports", column: "departure_airport_id"
 end
