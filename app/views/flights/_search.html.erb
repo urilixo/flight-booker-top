@@ -1,0 +1,20 @@
+
+<%= simple_form_for :search, url: root_path, method: "GET" do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :from do %>
+      <%= f.select :from, Airport.all.map{ |c| [c.code, c.id] }%>
+    <% end %>
+    <%= f.input :to do %>
+      <%= f.select :to, Airport.all.map{ |c| [c.code, c.id] }%>
+    <% end %>
+    <%= f.input :passenger_count, collection: 1..4, selected: 1 %>
+    <%= f.input :year, collection: Flight.all.map { |flight| flight.departure_time.year} %>
+    <%= f.input :month, collection: Flight.all.map { |flight| Date::MONTHNAMES[flight.departure_time.month]} %>
+    <%= f.input :day, collection: Flight.all.map { |flight| flight.departure_time.day} %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
