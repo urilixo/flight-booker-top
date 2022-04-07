@@ -1,20 +1,41 @@
+<%= form_with url: '/', method: :get do |form| %>
+  <% @airports = Airport.all %>
+  <% @flights = Flight.all %>
+  <% @days = Flight.all.map { |flight| flight.departure_time.day }.uniq %>
+  <% @months = Flight.all.map { |flight| Date::MONTHNAMES[flight.departure_time.month] }.uniq %>
+  <% @years = Flight.all.map { |flight| flight.departure_time.year }.uniq %>
+  <%= form.label :from %>
+  <%= form.collection_select :from, @airports, :id, :code %>
+  <%= form.label :to %>
+  <%= form.collection_select :to, @airports, :id, :code %>
+  <%= form.label :day %>
+  <%= form.select :day, @days  %>
+  <%= form.label :month %>
+  <%= form.select :month, @months  %>
+  <%= form.label :year %>
+  <%= form.select :year, @years  %>
+  <%= form.label :passengers %>
+  <%= form.select :passenger_count, 1..4  %>
+  <%= form.submit 'Search' %>
+<% end %>
 
-<%= simple_form_for :search, url: root_path, method: "GET" do |f| %>
-
-  <div class="form-inputs">
-    <%= f.input :from do %>
-      <%= f.select :from, Airport.all.map{ |c| [c.code, c.id] }%>
+<% if params[:from].present? %>
+  <% no_flights = true %>
+  <%= form_with url: new_booking_path, method: :get do |form| %>
+    <%= form.hidden_field :passenger_count, value: params[:passenger_count] %>
+    <% @date = "#{params[:year]}-#{params[:month].to_date.month}-#{params[:day]}".to_date %>
+    <% @flights.each do |flight| %>
+      <% if flight.departure_airport_id == params[:from].to_i &&
+            flight.arrival_airport_id == params[:to].to_i && 
+            flight.departure_time.to_date == @date %> 
+        <% no_flights = false %>
+        <%= form.label :selected_flight, "#{flight.departure_airport.code}  #{flight.arrival_airport.code} #{flight.departure_time}" %>
+        <%= form.radio_button :selected_flight, flight.id %>
+      <% end %>
     <% end %>
-    <%= f.input :to do %>
-      <%= f.select :to, Airport.all.map{ |c| [c.code, c.id] }%>
+    <% if no_flights == true %>
+      <%= "No flights found" %>
     <% end %>
-    <%= f.input :passenger_count, collection: 1..4, selected: 1 %>
-    <%= f.input :year, collection: Flight.all.map { |flight| flight.departure_time.year} %>
-    <%= f.input :month, collection: Flight.all.map { |flight| Date::MONTHNAMES[flight.departure_time.month]} %>
-    <%= f.input :day, collection: Flight.all.map { |flight| flight.departure_time.day} %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+    <%= form.submit 'Book' %>
+  <% end %>
 <% end %>
