@@ -1,0 +1,16 @@
+<%= form_with model: @booking do |f| %>
+  <%= f.label :passengers %>
+  <% i = 1 %>
+  <%= f.fields_for :passengers do |passenger_f| %>
+  <br>
+  <%= "#{i.ordinalize} passengers" %>
+    <%= passenger_f.label :name %>
+    <%= passenger_f.text_field :name %>
+    <%= passenger_f.label :email %>
+    <%= passenger_f.text_field :email %>
+    <% i+=1 %>
+    <br>
+  <% end %>
+  <%= f.hidden_field :flight_id, value: params[:selected_flight] %>
+  <%= f.submit %>
+<% end %>
