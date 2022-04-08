@@ -1,10 +1,59 @@
-<br><br>From: <%= @booking.flight.departure_airport.code%>
-<br>To: <%= @booking.flight.arrival_airport.code%>
-<br>Date: <%= @booking.flight.departure_time.to_date%>
-<br>Passengers: <%= @booking.passengers.count%>
-<% @booking.passengers.each do |passenger|%>
-
-<br>Passenger Name: <%= passenger.name%>
-<br>Passenger Email: <%= passenger.email%>
-<% end %>
-<br>
+<div class="columns is-mobile is-centered has-background-dark">
+  <div class="columns is-5">
+    <div class="card has-background-light mt-6">
+      <div class="card-content">
+        <ul class="steps is-horizontal is-narrow is-medium has-content-centered">
+          <li class="steps-segment has-gaps">
+            <span class="steps-marker is-hollow"></span>
+            <div class="steps-content">
+              <p class="heading">Select flight</p>
+          </li>
+          <li class="steps-segment has-gaps">
+            <span class="steps-marker is-hollow"></span>
+            <div class="steps-content">
+              <p class="heading">Passenger registry</p>
+            </div>
+          </li>
+          <li class="steps-segment">
+            <span class="steps-marker is-active"></span>
+            <div class="steps-content">
+              <p class="heading">Confirmation</p>
+            </div>
+          </li>
+        </ul>
+<div class="columns">
+  <div class="column">
+    <div class="card">
+      <div class="card-content">
+        <div class="has-text-centered is-size-4">Flight Info</div>
+          <div class="content">
+            <div class=" is-size-5 has-font-weight-medium">From <%= @booking.flight.departure_airport.code %> to <%= @booking.flight.arrival_airport.code %></div>
+            <br>
+            Departure time:<div class="is-size-7"><%= @booking.flight.departure_time.strftime('%d %B %Y at %H:%m') %></div><br>
+            Arrival time:<div class="is-size-7"><%= (@booking.flight.departure_time + @booking.flight.duration.minutes).strftime('%d %B %Y at %H:%m')%></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="columns">
+  <div class="column">
+    <div class="card">
+    
+      <div class="card-content">
+        <div class="has-text-centered is-size-4">Passenger(s) Info</div>
+        <% @booking.passengers.each do |passenger| %>
+          <div class="content">
+            <br>
+            <div class="is-size-7">Name: <%= passenger.name %></div><br>
+            <div class="is-size-7">Email: <%= passenger.email %></div>
+          </div>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+</div>

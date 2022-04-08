@@ -24,4 +24,4 @@ Flight.create(departure_airport: Airport.first, arrival_airport: Airport.last, d
 Flight.create(departure_airport: Airport.find_by(code: "LAX"), arrival_airport: Airport.find_by(code: 'GRU' ), departure_time: '2022-03-27T14:00:00', duration: 960)
 Flight.create(departure_airport: Airport.find_by(code: "SDU"), arrival_airport: Airport.find_by(code: 'GRU' ), departure_time: '2022-03-29T15:00:00', duration: 60)
 Flight.create(departure_airport: Airport.find_by(code: "SDU"), arrival_airport: Airport.find_by(code: 'VCP' ), departure_time: '2022-04-12T17:20:00', duration: 60)
-
+Flight.create(departure_airport: Airport.find_by(code: "SDU"), arrival_airport: Airport.find_by(code: 'CGN' ), departure_time: '2022-04-12T17:20:00', duration: 60)

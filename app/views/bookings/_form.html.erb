@@ -1,14 +1,58 @@
-<%= form_with model: @booking do |f| %>
-  <%= f.label :passengers %>
-  <%= f.fields_for :passengers do |passenger_f| %>
-  <br>
-  <%= "#{(passenger_f.index+1).ordinalize} passengers" %>
-    <%= passenger_f.label :name %>
-    <%= passenger_f.text_field :name %>
-    <%= passenger_f.label :email %>
-    <%= passenger_f.text_field :email %>
-    <br>
-  <% end %>
-  <%= f.hidden_field :flight_id, value: params[:selected_flight] %>
-  <%= f.submit %>
-<% end %>
+<div class="columns is-mobile is-centered has-background-dark">
+  <div class="columns is-5">
+    <div class="card has-background-light mt-5">
+      <div class="card-content">
+        <ul class="steps is-horizontal is-narrow is-medium has-content-centered">
+          <li class="steps-segment has-gaps">
+            <span class="steps-marker is-hollow"></span>
+            <div class="steps-content">
+              <p class="heading">Select flight</p>
+          </li>
+          <li class="steps-segment is-active">
+            <span class="steps-marker"></span>
+            <div class="steps-content">
+              <p class="heading">Passenger registry</p>
+            </div>
+          </li>
+          <li class="steps-segment">
+            <span class="steps-marker is-hollow"></span>
+            <div class="steps-content">
+              <p class="heading">Confirmation</p>
+            </div>
+          </li>
+        </ul>
+        <div class="content">
+          <%= form_with model: @booking do |f| %>
+            <%= f.fields_for :passengers do |passenger_f| %>
+            <br>
+            <div class="card">
+            <div class="card-header">
+              <p class="card-header-title">
+              <%= "#{(passenger_f.index+1).ordinalize} passenger" %>
+              </p>
+            </div>
+              <div class="card-content">
+                
+                  <div class="field">
+                    <label for="" class="label"><%= passenger_f.label :name %></label>
+                    <div class="control">
+                      <%= passenger_f.text_field :name, class: 'input' %>
+                    </div>
+                  </div>
+                  <label for="" class="label"><%= passenger_f.label :email %></label>
+                  <div class="control"><%= passenger_f.text_field :email, class:'input' %></div>
+              </div>
+            </div>
+              <br>
+            <% end %>
+            <%= f.hidden_field :flight_id, value: params[:selected_flight] %>
+            <%= f.submit 'Confirm Booking', class: 'button is-info is-fullwidth' %>
+          <% end %>
+        
+        
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

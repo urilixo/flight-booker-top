@@ -1,41 +1,113 @@
-<%= form_with url: '/', method: :get do |form| %>
-  <% @airports = Airport.all %>
-  <% @flights = Flight.all %>
-  <% @days = Flight.all.map { |flight| flight.departure_time.day }.uniq %>
-  <% @months = Flight.all.map { |flight| Date::MONTHNAMES[flight.departure_time.month] }.uniq %>
-  <% @years = Flight.all.map { |flight| flight.departure_time.year }.uniq %>
-  <%= form.label :from %>
-  <%= form.collection_select :from, @airports, :id, :code %>
-  <%= form.label :to %>
-  <%= form.collection_select :to, @airports, :id, :code %>
-  <%= form.label :day %>
-  <%= form.select :day, @days  %>
-  <%= form.label :month %>
-  <%= form.select :month, @months  %>
-  <%= form.label :year %>
-  <%= form.select :year, @years  %>
-  <%= form.label :passengers %>
-  <%= form.select :passenger_count, 1..4  %>
-  <%= form.submit 'Search' %>
-<% end %>
+<div class="columns is-mobile is-centered has-background-dark">
+  <div class="column is-5">
+    <div class="card has-background-light mt-5">
+      <div class="card-content">
+        <div class="content">
+          <div class="field is-horizontal">
+            <%= form_with url: '/', method: :get do |form| %>
+              <% @airports = Airport.all %>
+              <% @flights = Flight.all %>
+              <% @days = Flight.all.map { |flight| flight.departure_time.day }.uniq %>
+              <% @months = Flight.all.map { |flight| Date::MONTHNAMES[flight.departure_time.month] }.uniq %>
+              <% @years = Flight.all.map { |flight| flight.departure_time.year }.uniq %>
+              <div class="field-body has-text-centered">
+                <div class="field ">
+                  <label for="" class="label"><%= form.label :from %></label>
+                  <div class="control">
+                    <div class="select is-medium is-rounded"><%= form.collection_select :from, @airports, :id, :code %></div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="" class="label"><%= form.label :to %></label>
+                  <div class="control">
+                    <div class="select is-medium is-rounded"><%= form.collection_select :to, @airports, :id, :code %></div>
+                  </div>
+                </div>
+                <div class="field">
+                <label for="" class="label"><%= form.label :day %></label>
+                  <div class="control">
+                    <div class="select is-medium is-rounded">
+                      <%= form.select :day, @days  %>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="" class="label"><%= form.label :month %></label>
+                  <div class="control">
+                    <div class="select is-medium is-rounded"><%= form.select :month, @months  %></div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="" class="label"><%= form.label :year %></label>
+                    <div class="control">
+                      <div class="select is-medium is-rounded"><%= form.select :year, @years  %>
+                    </div
+                  ></div>
+                </div>
+                <div class="field">
+                  <label for="" class="label"><%= form.label :passengers %></label>
+                  <div class="control">
+                    <div class="select is-medium is-rounded"><%= form.select :passenger_count, 1..4  %></div>
+                  </div>
+                </div>
+                </div>
+              </div>
+                <div class="control"><%= form.submit 'Search', class: 'mt-6 is-fullwidth button is-primary' %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<br>
 <% if params[:from].present? %>
-  <% no_flights = true %>
-  <%= form_with url: new_booking_path, method: :get do |form| %>
-    <%= form.hidden_field :passenger_count, value: params[:passenger_count] %>
-    <% @date = "#{params[:year]}-#{params[:month].to_date.month}-#{params[:day]}".to_date %>
-    <% @flights.each do |flight| %>
-      <% if flight.departure_airport_id == params[:from].to_i &&
-            flight.arrival_airport_id == params[:to].to_i && 
-            flight.departure_time.to_date == @date %> 
-        <% no_flights = false %>
-        <%= form.label :selected_flight, "#{flight.departure_airport.code}  #{flight.arrival_airport.code} #{flight.departure_time}" %>
-        <%= form.radio_button :selected_flight, flight.id %>
-      <% end %>
-    <% end %>
-    <% if no_flights == true %>
-      <%= "No flights found" %>
-    <% end %>
-    <%= form.submit 'Book' %>
-  <% end %>
+  <div class="columns is-mobile is-centered has-background-dark">
+    <div class="column is-6">
+      <div class="card has-background-light">
+        <div class="card-content">
+          <div class="content">
+            <% no_flights = true %>
+            <%= form_with url: new_booking_path, method: :get do |form| %>
+              <%= form.hidden_field :passenger_count, value: params[:passenger_count] %>
+              <% @date = "#{params[:year]}-#{params[:month].to_date.month}-#{params[:day]}".to_date %>
+              <% @flights.each do |flight| %>
+
+                <% if flight.departure_airport_id == params[:from].to_i &&
+                      flight.arrival_airport_id == params[:to].to_i &&
+                      flight.departure_time.to_date == @date %>
+                      <% if no_flights == true %>
+                        <div class="columns">
+                          <div class="column is-1 has-text-weight-medium is-size-5">From</div>
+                          <div class="column is-1 has-text-weight-medium is-size-5">To</div>
+                          <div class="column has-text-weight-medium is-size-5">Departure time</div>
+                          <div class="column has-text-weight-medium is-size-5">Arrival time</div>
+                          <div class="column has-text-weight-medium is-size-5">Flight duration</div>
+                          <div class="column is-1 has-text-weight-medium is-size-5">Select</div>
+                        </div>
+                      <% end %>
+                  <% no_flights = false %>
+                  <div class="columns">
+                    <div class="column is-1"><%= flight.departure_airport.code %></div>
+                    <div class="column is-1"><%= flight.arrival_airport.code %></div>
+                    <div class="column"><%= flight.departure_time.strftime("%B %d, %Y %H:%M") %></div>
+                    <div class="column"><%= (flight.departure_time + flight.duration.minutes).strftime("%B %d, %Y %H:%M") %></div>
+                    <div class="column"><%= flight.duration %> minutes </div>
+                    <div class="column is-1 pl-9 has-text-centered"><%= form.radio_button :selected_flight, flight.id %></div>
+                  </div>
+                <% end %>
+              <% end %>
+              <% if no_flights == true %>
+                <%= "No flights found" %>
+              <% end %>
+              <% if no_flights == false %>
+                <%= form.submit 'Book Flight', class: 'button is-success is-fullwidth' %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
