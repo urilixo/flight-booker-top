@@ -21,9 +21,14 @@ class BookingsController < ApplicationController
   # POST /flights or /flights.json
   def create
     @booking = Booking.new(booking_params)
+    @passengers = @booking.passengers
 
     respond_to do |format|
       if @booking.save
+        @passengers.each do |passenger|
+          PassengerMailer.with(passenger: passenger, booking: @booking).confirmation_email.deliver_now
+        end
+        #PassengerMailer.with(booking: @booking, passengers: @booking.passengers).confirmation_email.deliver_now
         format.html { redirect_to booking_url(@booking), notice: "Booking was successfully created." }
         format.json { render :show, status: :created, location: @booking }
       else
