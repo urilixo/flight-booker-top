@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv='Content-Type'>
+</head>
+<body>
+  <h1>Thank you for you support, <%= @passenger.name %> </h1>
+  <p>
+    Thank you for booking your flight with us.
+    Your flight details are as follows:
+    <table>
+      <tr>
+        <td>Departing from: </td>
+        <td><%= @booking.flight.departure_airport.code %></td>
+      </tr>
+      <tr>
+        <td>Arriving at: </td>
+        <td><%= @booking.flight.arrival_airport.code %></td>
+      </tr>
+      <tr>
+        <td>Departure time: </td>
+        <td><%= @booking.flight.departure_time.to_formatted_s(:short) %></td>
+      </tr>
+      <tr>
+        <td>Flight duration: </td>
+        <td><%= @booking.flight.duration %> minutes</td>
+      </tr>
+      <tr>
+        <td>Arrival time: </td>
+        <td><%= (@booking.flight.departure_time + @booking.flight.duration.minutes).to_formatted_s(:short) %></td>
+      </tr>
+    </table>
+    </p>
+
+</body>
+</html>
