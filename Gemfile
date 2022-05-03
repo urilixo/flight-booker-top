@@ -46,6 +46,7 @@ group :development do
   gem 'spring'
   gem 'guard', '~> 2.18'
   gem 'guard-livereload', '~> 2.5', '>= 2.5.2'
+  gem 'letter_opener'
 end
 
 group :test do
